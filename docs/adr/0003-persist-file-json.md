@@ -1,0 +1,3 @@
+# 0003 — Nilai Slot di-persist ke file JSON sendiri, bukan ke source settings
+
+Setiap perubahan nilai Slot langsung ditulis ke file JSON di folder config OBS (satu entri per Counter), bukan disimpan di settings source yang ikut scene collection. Alasannya: scene collection OBS hanya tersimpan berkala dan saat exit, sehingga OBS crash di tengah stream bisa menghilangkan angka. File JSON terpisah menulis atomik di setiap tekanan hotkey dengan biaya rendah. Konsekuensi: format file adalah data user yang harus backward-compatible saat upgrade (keyed by source UUID, bukan nama, agar rename source aman).

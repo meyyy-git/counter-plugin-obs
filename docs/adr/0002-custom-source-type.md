@@ -1,0 +1,3 @@
+# 0002 — Counter sebagai custom source type yang membungkus text source internal
+
+Counter didaftarkan sebagai source type OBS baru bernama "Counter" (bukan plugin yang men-update text source milik user, bukan juga menggambar teks sendiri via gfx API). Plugin membuat text source internal (FreeType2, lintas platform) sebagai child dan meng-composite-nya. Alasannya: UX paling rapi bagi user (Add Source → "Counter", font/warna diatur di properties), dan hotkey per-Counter otomatis muncul di Settings → Hotkeys via `obs_hotkey_register_source`. Alternatif "update text source existing" menambah langkah manual dan rawan salah pilih source; menggambar sendiri berarti reimplement font rendering tanpa manfaat nyata.

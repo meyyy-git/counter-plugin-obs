@@ -11,17 +11,13 @@ W 3 / L 1
 
 Each **Counter** source has two independent slots (**A** and **B**) and a text template with `{A}` and `{B}` placeholders. The default template is `Death Count: {A}`; change it to `W {A} / L {B}` for a win/lose counter.
 
-Every source registers five hotkeys in **Settings → Hotkeys** (under the source's name):
+Every source registers three hotkeys in **Settings → Hotkeys** (under the source's name):
 
-| Hotkey | Action |
-|---|---|
-| Increment Counter A | `A + 1` |
-| Decrement Counter A | `A - 1` (stops at 0) |
-| Increment Counter B | `B + 1` |
-| Decrement Counter B | `B - 1` (stops at 0) |
-| Reset Counters | both slots → 0 |
-
-You only need to bind the ones you use. Font, color, template, and a **Reset counters when streaming starts** option are in the source's properties, along with a **Reset Counters Now** button.
+| Hotkey | Death Counter mode | Win / Lose mode |
+|---|---|---|
+| Increment / Win | `A + 1` | `W + 1` |
+| Decrement / Lose | `A - 1` (stops at 0) | `L + 1` |
+| Reset Counters | both → 0 | both → 0 | Font, color, template, and a **Reset counters when streaming starts** option are in the source's properties, along with a **Reset Counters Now** button.
 
 ## Stream Deck
 

@@ -35,11 +35,10 @@ struct counter_source {
 	long long slot_b = 0;
 	char *tmpl = nullptr; /* format string with {A} / {B} placeholders */
 	bool auto_reset = false;
+	char mode[16] = "death"; /* "death" or "winlose"; selects hotkey behavior */
 	char uuid[64] = {0};
-	obs_hotkey_id hotkey_inc_a = OBS_INVALID_HOTKEY_ID;
-	obs_hotkey_id hotkey_dec_a = OBS_INVALID_HOTKEY_ID;
-	obs_hotkey_id hotkey_inc_b = OBS_INVALID_HOTKEY_ID;
-	obs_hotkey_id hotkey_dec_b = OBS_INVALID_HOTKEY_ID;
+	obs_hotkey_id hotkey_inc = OBS_INVALID_HOTKEY_ID;
+	obs_hotkey_id hotkey_dec = OBS_INVALID_HOTKEY_ID;
 	obs_hotkey_id hotkey_reset = OBS_INVALID_HOTKEY_ID;
 };
 
@@ -85,7 +84,8 @@ void counter_persist(counter_source *s)
 	counter_persist_save(s->uuid, s->slot_a, s->slot_b);
 }
 
-void hotkey_inc_a(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
+/* Increment always counts slot A up: deaths in Death mode, wins in Win/Lose mode. */
+void hotkey_inc(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
 {
 	if (!pressed)
 		return;
@@ -96,35 +96,17 @@ void hotkey_inc_a(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
 	counter_refresh_text(s);
 }
 
-void hotkey_dec_a(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
+/* Decrement counts down in Death mode; in Win/Lose mode it counts a loss (slot B up). */
+void hotkey_dec(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
 {
 	if (!pressed)
 		return;
 	auto *s = (counter_source *)data;
-	if (s->slot_a > 0)
-		s->slot_a--;
-	counter_persist(s);
-	counter_refresh_text(s);
-}
-
-void hotkey_inc_b(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
-{
-	if (!pressed)
-		return;
-	auto *s = (counter_source *)data;
-	if (s->slot_b < LLONG_MAX)
+	if (strcmp(s->mode, "winlose") == 0) {
 		s->slot_b++;
-	counter_persist(s);
-	counter_refresh_text(s);
-}
-
-void hotkey_dec_b(void *data, obs_hotkey_id, obs_hotkey_t *, bool pressed)
-{
-	if (!pressed)
-		return;
-	auto *s = (counter_source *)data;
-	if (s->slot_b > 0)
-		s->slot_b--;
+	} else if (s->slot_a > 0) {
+		s->slot_a--;
+	}
 	counter_persist(s);
 	counter_refresh_text(s);
 }
@@ -172,14 +154,10 @@ void *counter_create(obs_data_t *settings, obs_source_t *source)
 	if (!counter_persist_load(s->uuid, &s->slot_a, &s->slot_b))
 		counter_persist(s);
 
-	s->hotkey_inc_a = obs_hotkey_register_source(source, "Counter.IncrementA", obs_module_text("Hotkey.IncrementA"),
-						     hotkey_inc_a, s);
-	s->hotkey_dec_a = obs_hotkey_register_source(source, "Counter.DecrementA", obs_module_text("Hotkey.DecrementA"),
-						     hotkey_dec_a, s);
-	s->hotkey_inc_b = obs_hotkey_register_source(source, "Counter.IncrementB", obs_module_text("Hotkey.IncrementB"),
-						     hotkey_inc_b, s);
-	s->hotkey_dec_b = obs_hotkey_register_source(source, "Counter.DecrementB", obs_module_text("Hotkey.DecrementB"),
-						     hotkey_dec_b, s);
+	s->hotkey_inc = obs_hotkey_register_source(source, "Counter.Increment", obs_module_text("Hotkey.Increment"),
+						   hotkey_inc, s);
+	s->hotkey_dec = obs_hotkey_register_source(source, "Counter.Decrement", obs_module_text("Hotkey.Decrement"),
+						   hotkey_dec, s);
 	s->hotkey_reset =
 		obs_hotkey_register_source(source, "Counter.Reset", obs_module_text("Hotkey.Reset"), hotkey_reset, s);
 
@@ -202,10 +180,8 @@ void counter_destroy(void *data)
 		g_counters.erase(std::remove(g_counters.begin(), g_counters.end(), s), g_counters.end());
 	}
 
-	obs_hotkey_unregister(s->hotkey_inc_a);
-	obs_hotkey_unregister(s->hotkey_dec_a);
-	obs_hotkey_unregister(s->hotkey_inc_b);
-	obs_hotkey_unregister(s->hotkey_dec_b);
+	obs_hotkey_unregister(s->hotkey_inc);
+	obs_hotkey_unregister(s->hotkey_dec);
 	obs_hotkey_unregister(s->hotkey_reset);
 
 	if (s->text) {
@@ -222,6 +198,8 @@ void counter_source_update(void *data, obs_data_t *settings)
 
 	bfree(s->tmpl);
 	s->tmpl = bstrdup(obs_data_get_string(settings, "template"));
+	const char *mode = obs_data_get_string(settings, "mode");
+	strncpy(s->mode, mode, sizeof(s->mode) - 1);
 	s->auto_reset = obs_data_get_bool(settings, "auto_reset");
 
 	obs_data_t *ts = obs_data_create();

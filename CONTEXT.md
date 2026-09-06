@@ -16,6 +16,10 @@ _Avoid_: counter A/B, angka, field
 Teks format milik Counter dengan placeholder `{A}` dan `{B}` yang menentukan apa yang dirender, mis. `Death Count: {A}` atau `W {A} / L {B}`.
 _Avoid_: format, layout, label
 
+**Mode**:
+Preset pilihan di properties (Death Counter, Win / Lose, Custom) yang mengisi Template; Custom berarti Template ditulis bebas oleh user.
+_Avoid_: preset, tipe, jenis
+
 **Increment / Decrement**:
 Menambah atau mengurangi nilai satu Slot tepat satu per satu per penekanan hotkey.
 _Avoid_: add, minus, klik

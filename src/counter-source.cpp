@@ -272,9 +272,8 @@ obs_properties_t *counter_get_properties(void *data)
 	obs_properties_add_font(props, "font", obs_module_text("Font"));
 	obs_properties_add_color(props, "color", obs_module_text("Color"));
 	obs_properties_add_bool(props, "auto_reset", obs_module_text("AutoReset"));
-	obs_properties_add_button(props, "reset_now", obs_module_text("ResetNow"), reset_button_clicked);
+	obs_properties_add_button2(props, "reset_now", obs_module_text("ResetNow"), reset_button_clicked, data);
 
-	UNUSED_PARAMETER(data);
 	return props;
 }
 

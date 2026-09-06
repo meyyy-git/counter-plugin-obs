@@ -36,11 +36,12 @@ endif()
 
 target_sources(
   ${CMAKE_PROJECT_NAME}
-  PRIVATE src/plugin-main.cpp
-          src/counter-source.cpp
-          src/counter-persist.cpp
-          src/counter-source.hpp
-          src/counter-persist.hpp
+  PRIVATE
+    src/plugin-main.cpp
+    src/counter-source.cpp
+    src/counter-persist.cpp
+    src/counter-source.hpp
+    src/counter-persist.hpp
 )
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})

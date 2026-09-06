@@ -172,21 +172,16 @@ void *counter_create(obs_data_t *settings, obs_source_t *source)
 	if (!counter_persist_load(s->uuid, &s->slot_a, &s->slot_b))
 		counter_persist(s);
 
-	s->hotkey_inc_a = obs_hotkey_register_source(source, "Counter.IncrementA",
-						     obs_module_text("Hotkey.IncrementA"),
+	s->hotkey_inc_a = obs_hotkey_register_source(source, "Counter.IncrementA", obs_module_text("Hotkey.IncrementA"),
 						     hotkey_inc_a, s);
-	s->hotkey_dec_a = obs_hotkey_register_source(source, "Counter.DecrementA",
-						     obs_module_text("Hotkey.DecrementA"),
+	s->hotkey_dec_a = obs_hotkey_register_source(source, "Counter.DecrementA", obs_module_text("Hotkey.DecrementA"),
 						     hotkey_dec_a, s);
-	s->hotkey_inc_b = obs_hotkey_register_source(source, "Counter.IncrementB",
-						     obs_module_text("Hotkey.IncrementB"),
+	s->hotkey_inc_b = obs_hotkey_register_source(source, "Counter.IncrementB", obs_module_text("Hotkey.IncrementB"),
 						     hotkey_inc_b, s);
-	s->hotkey_dec_b = obs_hotkey_register_source(source, "Counter.DecrementB",
-						     obs_module_text("Hotkey.DecrementB"),
+	s->hotkey_dec_b = obs_hotkey_register_source(source, "Counter.DecrementB", obs_module_text("Hotkey.DecrementB"),
 						     hotkey_dec_b, s);
-	s->hotkey_reset = obs_hotkey_register_source(source, "Counter.Reset",
-						     obs_module_text("Hotkey.Reset"),
-						     hotkey_reset, s);
+	s->hotkey_reset =
+		obs_hotkey_register_source(source, "Counter.Reset", obs_module_text("Hotkey.Reset"), hotkey_reset, s);
 
 	{
 		std::lock_guard<std::mutex> lock(g_mutex);
@@ -204,8 +199,7 @@ void counter_destroy(void *data)
 
 	{
 		std::lock_guard<std::mutex> lock(g_mutex);
-		g_counters.erase(std::remove(g_counters.begin(), g_counters.end(), s),
-				 g_counters.end());
+		g_counters.erase(std::remove(g_counters.begin(), g_counters.end(), s), g_counters.end());
 	}
 
 	obs_hotkey_unregister(s->hotkey_inc_a);
@@ -271,16 +265,14 @@ obs_properties_t *counter_get_properties(void *data)
 {
 	obs_properties_t *props = obs_properties_create();
 
-	obs_property_t *tmpl = obs_properties_add_text(props, "template",
-						       obs_module_text("Template"),
-						       OBS_TEXT_DEFAULT);
+	obs_property_t *tmpl =
+		obs_properties_add_text(props, "template", obs_module_text("Template"), OBS_TEXT_DEFAULT);
 	obs_property_set_long_description(tmpl, obs_module_text("Template.Desc"));
 
 	obs_properties_add_font(props, "font", obs_module_text("Font"));
 	obs_properties_add_color(props, "color", obs_module_text("Color"));
 	obs_properties_add_bool(props, "auto_reset", obs_module_text("AutoReset"));
-	obs_properties_add_button(props, "reset_now", obs_module_text("ResetNow"),
-				  reset_button_clicked);
+	obs_properties_add_button(props, "reset_now", obs_module_text("ResetNow"), reset_button_clicked);
 
 	UNUSED_PARAMETER(data);
 	return props;

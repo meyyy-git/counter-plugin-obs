@@ -298,7 +298,7 @@ void counter_register_source()
 	obs_source_info info = {};
 	info.id = SOURCE_ID;
 	info.type = OBS_SOURCE_TYPE_INPUT;
-	info.output_flags = OBS_SOURCE_CUSTOM_DRAW | OBS_SOURCE_COMPOSITE;
+	info.output_flags = OBS_SOURCE_CUSTOM_DRAW | OBS_SOURCE_COMPOSITE | OBS_SOURCE_VIDEO;
 	info.get_name = counter_get_name;
 	info.create = counter_create;
 	info.destroy = counter_destroy;

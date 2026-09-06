@@ -38,7 +38,7 @@
     },
     "name": "counter",
     "displayName": "Counter for OBS",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "plugin-counter contributors",
     "website": "https://github.com/plugin-counter/counter",
     "email": "counter@example.com"

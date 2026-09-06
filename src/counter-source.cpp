@@ -267,13 +267,45 @@ bool reset_button_clicked(obs_properties_t *, obs_property_t *, void *data)
 	return false;
 }
 
+/* Preset modes: picking one fills the template; editing the template by hand
+   switches back to Custom. */
+bool preset_changed(obs_properties_t *, obs_property_t *, obs_data_t *settings)
+{
+	const char *mode = obs_data_get_string(settings, "mode");
+
+	if (strcmp(mode, "death") == 0)
+		obs_data_set_string(settings, "template", "Death Count: {A}");
+	else if (strcmp(mode, "winlose") == 0)
+		obs_data_set_string(settings, "template", "W {A} / L {B}");
+
+	return true;
+}
+
+bool template_changed(obs_properties_t *, obs_property_t *, obs_data_t *settings)
+{
+	const char *tmpl = obs_data_get_string(settings, "template");
+
+	if (strcmp(tmpl, "Death Count: {A}") != 0 && strcmp(tmpl, "W {A} / L {B}") != 0)
+		obs_data_set_string(settings, "mode", "custom");
+
+	return true;
+}
+
 obs_properties_t *counter_get_properties(void *data)
 {
 	obs_properties_t *props = obs_properties_create();
 
+	obs_property_t *mode = obs_properties_add_list(props, "mode", obs_module_text("Mode"), OBS_COMBO_TYPE_LIST,
+						       OBS_COMBO_FORMAT_STRING);
+	obs_property_list_add_string(mode, obs_module_text("Mode.DeathCounter"), "death");
+	obs_property_list_add_string(mode, obs_module_text("Mode.WinLose"), "winlose");
+	obs_property_list_add_string(mode, obs_module_text("Mode.Custom"), "custom");
+	obs_property_set_modified_callback(mode, preset_changed);
+
 	obs_property_t *tmpl =
 		obs_properties_add_text(props, "template", obs_module_text("Template"), OBS_TEXT_DEFAULT);
 	obs_property_set_long_description(tmpl, obs_module_text("Template.Desc"));
+	obs_property_set_modified_callback(tmpl, template_changed);
 
 	obs_properties_add_font(props, "font", obs_module_text("Font"));
 	obs_properties_add_color(props, "color", obs_module_text("Color"));
@@ -293,6 +325,7 @@ void counter_get_defaults(obs_data_t *settings)
 	obs_data_release(font);
 
 	obs_data_set_default_int(settings, "color", 0xFFFFFFFF);
+	obs_data_set_default_string(settings, "mode", "death");
 	obs_data_set_default_string(settings, "template", "Death Count: {A}");
 	obs_data_set_default_bool(settings, "auto_reset", false);
 }

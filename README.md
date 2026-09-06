@@ -1,6 +1,8 @@
 # Counter for OBS
 
-Plugin OBS Studio untuk menampilkan counter sederhana di stream — death counter, skor Win/Lose, atau apa pun yang bisa dihitung. Tanpa styling ribet: tambah source **Counter**, pasang 3 tombol, langsung jalan.
+**Language / Bahasa:** [English](README.md) · [Bahasa Indonesia](README.id.md)
+
+A native OBS Studio plugin that shows simple counters on your stream — a death counter, a win/lose score, anything countable. No styling fuss: add a **Counter** source, bind 3 buttons, done.
 
 ```
 Death Count: 12
@@ -9,108 +11,108 @@ W 3 / L 1
 
 ---
 
-## Cara Pakai (untuk pemula)
+## How to Use (beginner friendly)
 
-### 1. Install plugin
+### 1. Install the plugin
 
-Lihat bagian [Install](#install) di bawah — unduh, copy satu folder, restart OBS.
+See [Install](#install) below — download it, copy one folder, restart OBS.
 
-### 2. Tambahkan source Counter
+### 2. Add a Counter source
 
-1. Buka OBS.
-2. Di panel **Sources** (kiri bawah), klik tombol **+**.
-3. Pilih **Counter** dari daftar.
-4. Beri nama bebas (mis. "Death Counter"), lalu klik **OK**.
+1. Open OBS.
+2. In the **Sources** panel (bottom left), click the **+** button.
+3. Pick **Counter** from the list.
+4. Name it anything you like (e.g. "Death Counter") and click **OK**.
 
-### 3. Pilih Mode dan atur tampilan
+### 3. Pick a Mode and style it
 
-Di jendela properties yang muncul:
+In the properties window that appears:
 
-- **Mode** — pilih:
-  - **Death Counter** → tampil `Death Count: 0` (angka di slot A)
-  - **Win / Lose** → ganti template jadi `W {A} / L {B}` (menang di A, kalah di B)
-  - **Custom** → tulis template sendiri; gunakan `{A}` dan `{B}` sebagai angka
-- **Font** dan **Color** — atur ukuran/warna teks.
-- Klik **OK**. Teks counter langsung tampil di scene.
+- **Mode** — choose:
+  - **Death Counter** → displays `Death Count: 0` (the number is slot A)
+  - **Win / Lose** → switches the template to `W {A} / L {B}` (wins in A, losses in B)
+  - **Custom** → write your own template; use `{A}` and `{B}` as the numbers
+- **Font** and **Color** — size and color of the text.
+- Click **OK**. The counter text appears on your scene right away.
 
-> Template adalah teks bebas: tulis `Kalah: {A} kali` dan itu yang muncul di layar, dengan `{A}` diganti angka.
+> The template is free text: write `Deaths: {A} so far` and that's what shows on screen, with `{A}` replaced by the number.
 
-### 4. Pasang 3 hotkey
+### 4. Bind the 3 hotkeys
 
-Counter hanya berubah lewat hotkey, jadi langkah ini wajib:
+The counter only changes through hotkeys, so this step is required:
 
-1. Buka **File → Settings → Hotkeys**.
-2. Gulir / cari bagian bernama sama dengan nama source Anda (mis. "Death Counter").
-3. Ada 3 aksi — klik kolomnya lalu tekan tombol keyboard yang diinginkan:
+1. Open **File → Settings → Hotkeys**.
+2. Scroll to the section named after your source (e.g. "Death Counter").
+3. There are 3 actions — click a field and press the key you want:
 
-| Aksi | Mode Death Counter | Mode Win / Lose |
+| Action | Death Counter mode | Win / Lose mode |
 |---|---|---|
 | **Increment / Win** | Deaths +1 | Wins +1 |
-| **Decrement / Lose** | Deaths −1 (berhenti di 0) | Losses +1 |
-| **Reset Counters** | semua → 0 | semua → 0 |
+| **Decrement / Lose** | Deaths −1 (stops at 0) | Losses +1 |
+| **Reset Counters** | all → 0 | all → 0 |
 
-Contoh: bind `F13`… tidak punya F13? Pakai tombol yang tidak dipakai game, mis. `Ctrl+Shift+1`. Klik **Apply**.
+No F13 key? Use something games don't grab, like `Ctrl+Shift+1`. Click **Apply**.
 
-### 5. Selesai!
+### 5. Done!
 
-Tekan hotkey saat streaming — angka di layar langsung berubah. Nilainya otomatis tersimpan, aman walau OBS crash.
+Press your hotkeys while streaming — the number on screen changes instantly. Values are saved automatically, so an OBS crash won't lose your count.
 
 ---
 
 ## Stream Deck
 
-Plugin ini tidak punya kode khusus Stream Deck — Stream Deck cukup memicu hotkey OBS yang sama:
+The plugin has no Stream Deck-specific code — your Stream Deck simply triggers the same OBS hotkeys:
 
-1. Bind 3 aksi di Settings → Hotkeys seperti di atas (pilih tombol yang tidak bentrok, mis. `Numpad 1/2/3`).
-2. Di aplikasi Stream Deck, drag action **System → Hotkey** ke tombol, isi key yang sama.
+1. Bind the 3 actions in Settings → Hotkeys as above (pick keys nothing else uses, e.g. `Numpad 1/2/3`).
+2. In the Stream Deck app, drag a **System → Hotkey** action onto a button and set the same key.
 
-Alternatif: pakai plugin resmi *OBS Studio* di Stream Deck dan pilih aksi **Trigger Hotkey**.
+Alternative: install the official *OBS Studio* plugin for Stream Deck and use its **Trigger Hotkey** action.
 
-> Tips Win/Lose: tombol 1 = Win, tombol 2 = Lose, tombol 3 = Reset. Selesai.
+> Win/Lose tip: button 1 = Win, button 2 = Lose, button 3 = Reset. Done.
 
-## Auto-reset tiap sesi
+## Auto-reset each session
 
-Di properties Counter ada checkbox **Reset counters when streaming starts** — aktifkan kalau angka harus mulai dari 0 setiap kali mulai live. Ada juga tombol **Reset Counters Now** untuk reset manual.
+The Counter properties have a **Reset counters when streaming starts** checkbox — enable it if the number must start at 0 every time you go live. There's also a **Reset Counters Now** button for a manual reset.
 
-## Data tersimpan di mana?
+## Where is the data stored?
 
-Setiap perubahan langsung ditulis ke file JSON di folder config OBS (`plugin_config/counter/counters.json`). Crash atau mati lampu tidak menghilangkan angka. Reset manual? Pakai tombol/hotkey Reset.
+Every change is written immediately to a JSON file in OBS's config folder (`plugin_config/counter/counters.json`). A crash or power cut won't lose the number. To reset manually, use the Reset button/hotkey.
 
 ---
 
 ## Install
 
-Unduh dari [halaman Releases](https://github.com/meyyy-git/counter-plugin-obs/releases) — ambil file sesuai OS Anda.
+Download from the [Releases page](https://github.com/meyyy-git/counter-plugin-obs/releases) — grab the file for your OS.
 
 **Windows** (`counter-x.y.z-windows-x64.zip`):
-1. Extract zip → dapat folder `counter` (isi: `bin\64bit\counter.dll` dan `data\`).
-2. Copy folder `counter` ke `C:\ProgramData\obs-studio\plugins\` (buat foldernya kalau belum ada).
+1. Extract the zip → you get a `counter` folder (containing `bin\64bit\counter.dll` and `data\`).
+2. Copy that folder into `C:\ProgramData\obs-studio\plugins\` (create the folder if it doesn't exist).
 3. Restart OBS.
 
-**macOS** (`counter-x.y.z-macos-universal.pkg`): double-click file .pkg, ikuti petunjuk, restart OBS.
+**macOS** (`counter-x.y.z-macos-universal.pkg`): double-click the .pkg, follow the prompts, restart OBS.
 
 **Ubuntu/Debian** (`counter-x.y.z-x86_64-linux-gnu.deb`): `sudo apt install ./counter-x.y.z-x86_64-linux-gnu.deb`, restart OBS.
 
-Butuh OBS Studio 30.0 atau lebih baru.
+Requires OBS Studio 30.0 or newer.
 
-### Plugin tidak muncul?
+### Plugin doesn't show up?
 
-- Pastikan sudah **restart OBS** setelah copy file.
-- Cek **Tools → Plugin Manager** (OBS 31+) — "counter" harus tercentang.
-- Cek log OBS (`%APPDATA%\obs-studio\logs`): kalau ada `obs_register_source failed`, versi plugin salah — update ke release terbaru.
+- Make sure you **restarted OBS** after copying the files.
+- Check **Tools → Plugin Manager** (OBS 31+) — "counter" should be checked.
+- Check the OBS log (`%APPDATA%\obs-studio\logs`): if you see `obs_register_source failed`, you have an old plugin build — update to the latest release.
 
-## Building (untuk developer)
+## Building (for developers)
 
-Proyek ini berbasis [obs-plugintemplate](https://github.com/obsproject/obs-plugintemplate) resmi; CI mem-build Windows, macOS, dan Ubuntu otomatis di setiap push.
+The project is based on the official [OBS plugin template](https://github.com/obsproject/obs-plugintemplate); CI builds Windows, macOS, and Ubuntu automatically on every push.
 
 ```sh
 git clone https://github.com/meyyy-git/counter-plugin-obs.git
-cmake --preset windows-x64   # atau macos / ubuntu-x86_64
+cmake --preset windows-x64   # or macos / ubuntu-x86_64
 cmake --build --preset windows-x64
 ```
 
-Prasyarat toolchain: MSVC + CMake (Windows), Xcode (macOS), `build-essential` + `cmake` (Ubuntu). Panduan lengkap di [template](https://github.com/obsproject/obs-plugintemplate#readme).
+Toolchain prerequisites: MSVC + CMake (Windows), Xcode (macOS), `build-essential` + `cmake` (Ubuntu). Full guide in the [template README](https://github.com/obsproject/obs-plugintemplate#readme).
 
 ## License
 
-GPL-2.0 (mewarisi obs-plugintemplate).
+GPL-2.0 (inherited from the OBS plugin template).

@@ -255,6 +255,12 @@ uint32_t counter_get_height(void *data)
 	return (uint32_t)obs_source_get_height(s->text);
 }
 
+/* Required for OBS_SOURCE_COMPOSITE sources; the text child produces no audio. */
+bool counter_audio_render(void *, uint64_t *, obs_source_audio_mix *, uint32_t, size_t, size_t)
+{
+	return false;
+}
+
 bool reset_button_clicked(obs_properties_t *, obs_property_t *, void *data)
 {
 	counter_reset((counter_source *)data);
@@ -305,6 +311,7 @@ void counter_register_source()
 	info.update = counter_source_update;
 	info.video_render = counter_video_render;
 	info.get_width = counter_get_width;
+	info.audio_render = counter_audio_render;
 	info.get_height = counter_get_height;
 	info.get_properties = counter_get_properties;
 	info.get_defaults = counter_get_defaults;
